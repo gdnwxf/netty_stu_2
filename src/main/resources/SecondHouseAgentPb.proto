@@ -1,0 +1,215 @@
+option java_package = "com.fangdd.base.pb.protocol";
+option java_outer_classname = "SecondHouseAgentProtoc";
+
+message SecondHouseAgentPb{
+	optional SystemType systemType=1;
+	optional InterfaceVersion interfaceVersion=2;
+	
+	required BussinessType bussinessType = 3;//接口类型
+	optional ResponseStatus responseStatus = 4;//状态返回
+	
+	optional SearchInfo searchInfo = 5;	//搜索信息
+	optional UserInfo userInfo = 6;//用户信息
+	
+	optional SecondHouse secondHouse = 7;//楼盘结构化信息
+	repeated SecondHouse secondHouses = 8;
+	
+	optional HouseImage houseImage = 9;//图片
+	repeated HouseImage houseImages = 10;
+	
+	optional CityRegionDict cityRegionDict = 11;//城市区域
+	repeated CityRegionDict cityRegionDicts=12;
+	
+	optional QrLogin qrLogin = 13; //二维码登录
+	
+	optional PageInfo pageInfo = 14;	//页码信息
+	
+	enum SystemType {
+		ANDROID=1;
+		IOS=2;
+	}
+	
+	enum InterfaceVersion{
+		V10=1;
+	}
+	
+	enum BussinessType{
+		
+		REGIST = 1;//注册
+		
+		LOGIN = 2;//登录
+		
+		MODIFY_PWD=3;//修改密码
+		
+		REG_AUTH_CODE=4;//注册流程获取验证码
+		
+		AUTH_CODE=5;//获取验证码
+		
+		VERIFY_AUTH_CODE=6;//判断验证码有效性
+		
+		SET_NEW_PWD = 7;//设置新密码（忘记密码）
+		
+		GET_CITY_REGION = 8;//获取城市区域
+		SALE_LIST=9;//获取出售房源列表/查找出售房源
+		SALE_HOUSE_DETAIL=10;//出售房源详情
+		RESERVATE_LOOK_TIME=11;//预约带看
+		
+	}
+	
+	message UserInfo{
+		optional int32 userId=1;
+		optional string userName=2;//用户名
+		optional string authCode=3;//验证码
+		optional int32 userType=4;//用户类型 1.业主 2.业务员  
+		optional string lastLoginTime=5;// 最后登录时间
+		optional string lastLoginIp=6;// 最后登录IP  
+		optional int32 userStatus=7;//帐号状态   1.启动  2.停用
+		optional string password=8;//密码
+		optional string password2=9;//二次验证密码
+		optional string sessionKey = 10;
+	}
+		
+	message SearchInfo{
+		optional int32 pageIndex=1;
+		optional int32 pageSize=2;	
+		optional int32 allCount=3;
+		optional string searchKey=4; //搜索关键字
+	}
+	
+	
+	//提交返回的状态信息  
+	message ResponseStatus {
+		//状态吗 00000成功 
+		optional string code=1;
+		//状态描述
+		optional string msg=2;
+	}
+	
+	//经纪人信息
+	message Agent{
+         optional int32 id=1;
+	}
+	
+	//业主信息
+	message Owner{
+		optional int32 id=1;
+		optional UserInfo userInfo=2;//用户信息
+		optional string ownerName=3;//业主姓名
+		optional string ownerPhone=4;//联系方式
+		optional int32 ownerSex=5;//1.男 2.女 3.其他  
+	}
+	
+	//业务员信息
+	message Salesman{
+		optional int32 id=1;
+		optional UserInfo userInfo=2;//用户信息
+		optional string salesmanName=3;//业主姓名
+		optional string salesmanPhone=4;//联系方式
+		optional int32 salesmanCardId=5;//业务员工牌号 
+	}
+	
+	//楼盘信息
+	message SecondHouse{
+		optional int32 id=1;
+		optional Owner owner=2;//业主
+		optional Salesman salesman=3;//业务员
+		optional Cell cell=4;//小区,
+		optional string cellName=5;//小区名称
+		optional string tese=6;//特色（唯一住房、满5年、看花园、红本在手、学区房）'
+		optional string describe=7;//'房源描述',
+		optional float yuqishoujia=8;//'预期售价',
+		optional string linkman=9;//'联系人',
+		optional int32 linkmanSex=10;//联系人性别(1男2女)
+		optional string linkmanPhone=11;//'联系方式',
+		optional HuXingType huxing=12;//'户型类型',
+		optional string louceng=13;//'楼栋号',
+		optional string danyuan=14;// '单元号',
+		optional string fanghao=15;//'房号',
+		optional int32 shi=16;// '室',
+		optional int32 chu=17;//'厨',
+		optional int32 wei=18;//'卫',
+		optional int32 ting=19;//厅',
+		optional int32 onFloor=20;//'楼层',
+		optional int32 allFloor=21;//'共几层',
+		optional int32 area=22;//'建筑面积',
+		optional ChaoxiangType chaoxiang=23;//朝向类型
+		optional int32 reservationCount=24;//预约人数
+		optional int32 valueCount=25;//估值人数
+		optional HouseImage imageUrl=26;//房源图片
+		optional string sectionName=27;//所属片区
+	}
+	
+	
+	
+	//图片信息
+	message HouseImage {
+		optional int32 id=1;
+		optional int32 houseId=2;  //房源id
+		optional string imageUrl=3;//图片URL
+		optional int32 image_type=4;//图片类型
+		optional int32 image_level=5;//图片级别
+		optional string image_describe=6;//图片描述
+		optional int32 is_delete=7;//是否删除（0.正常1.删除）
+	}
+	
+	//户型类型
+	enum HuXingType{
+		NONE = 0;//无类型
+		PING_CENG=1;//平层
+		YUE_CENG=2;//跃层
+		FU_SHI=3;//复式
+		BIE_SHU=4;//别墅
+		MING_FANG=5;//民房
+	}
+	
+	//朝向类型
+	enum  ChaoxiangType{
+		UNINPUT = 0;//无类型
+		EAST = 1;//东
+		SOUTH = 2;//南
+		WEST = 3;//西
+		NORTH = 4;//北
+		SOUTH_NORTH= 5;
+		EAST_WEST = 6;
+		EAST_NORTH= 7;
+		EAST_SOUTH=8;
+		WEST_SOUTH=9;
+		WEST_NORTH=10;
+	}
+		
+	//城市区域片区
+	message CityRegionDict{
+		optional int32 cityId = 1;//城市id
+		optional int32 pId = 2;//父类id
+		optional string name = 3;//名称
+	}
+	
+	//小区
+	message Cell{
+		optional int32 id=1;
+		optional CityRegionDict city=2;//城市,
+		optional CityRegionDict region=3;//区域
+		optional CityRegionDict pianqu=4;//片区
+		optional string name=5;//小区名
+		optional string lng=6;//经度
+		optional string lat=7;//纬度
+	}
+	
+	// 二维码登录
+	message QrLogin{
+		optional string qrCodeMessage = 1; // 二维码信息
+		optional int32 isAffirm = 2; // 是否确认登录 1.为允许登录,2.为禁止登录
+		optional QrAction qrAction = 3;// 登录操作
+	}
+	
+	enum QrAction{
+		PERMISSION = 1; // 登录权限验证
+		AFFIRM = 2; // 确认登录验证
+	}
+	
+	message PageInfo{
+		optional int32 pageIndex=1;
+		optional int32 pageSize=2;	
+		optional int32 allCount=3;
+	}
+}
