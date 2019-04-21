@@ -1,8 +1,0 @@
-
-option java_package = "com.hzins.pb.protocol";
-option java_outer_classname = "SubMessageProtoc";
-
-message SubMessagePB{
-	optional  int64 fromUserId = 5;                //发件人
-	optional  int64 toUserId = 6;                 //收件
-}
